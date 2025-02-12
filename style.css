@@ -1367,6 +1367,35 @@ h1, h2, h3, h4 {
     transform: scale(1.02);
 }
 
+#signature {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.avatar-container {
+    height: 110px; /* 固定高度，防止浮动 */
+    position: relative; /* 确保绝对定位的子元素相对于此元素 */
+    overflow: hidden; /* 防止内容溢出 */
+}
+
+.name-title {
+    flex: 1;
+    position: relative; /* 确保子元素绝对定位相对于此元素 */
+}
+
+#signature {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    font-style: italic;
+    height: 30px; /* 固定高度，保持空白位置 */
+    visibility: visible; /* 默认可见 */
+    transition: visibility 0s 1s; /* 延迟隐藏，保持空白位置 */
+}
+
+
 /* 响应式调整 */
 @media (max-width: 768px) {
     .avatar-hover-preview {

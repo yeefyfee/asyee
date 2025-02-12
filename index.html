@@ -59,8 +59,10 @@
                             </div>
                         </div>
                         <div class="name-title">
-                            <h1>易天华</h1>
-                            <p class="subtitle">男 | 27岁 | 8年工作经验</p>
+                            <h1>易天华</h1>    
+                            <div id="signature"></div>                                                  
+                            <p class="subtitle">男 | 27岁 | 8年工作经验</p>  
+                                                      
                         </div>
                     </div>
                     <div class="contact-info">
@@ -422,7 +424,59 @@
             </div>
         </section>
 
-        
+        <section class="education">
+            <h2><i class="bi bi-mortarboard"></i>教育经历</h2>
+            <div class="education-item">
+                <h3>国家开放大学</h3>
+                <p class="edu-meta">计算机科学与技术 | 大专 | 2017-2020</p>
+            </div>
+        </section>
     </div>
+
+    <script>
+        const signatures = [
+            "大江东去，浪淘尽，千古风流人物",
+            "人间如梦，何必问归期",
+            "人生如梦，一尊还酹江月",
+            "会当凌绝顶，一览众山小",
+            
+        ];
+    
+        let currentSignatureIndex = 0;
+        let currentCharIndex = 0;
+        let isDeleting = false;
+    
+        function type() {
+            const signatureElement = document.getElementById("signature");
+            const currentSignature = signatures[currentSignatureIndex];
+    
+            if (isDeleting) {
+                signatureElement.textContent = currentSignature.substring(0, currentCharIndex--);
+                if (currentCharIndex < 0) {
+                    isDeleting = false;
+                    currentSignatureIndex = (currentSignatureIndex + 1) % signatures.length;
+                    setTimeout(type, 500); // 等待一段时间后开始打字
+                } else {
+                    setTimeout(type, 100); // 删除速度
+                }
+            } else {
+                signatureElement.textContent = currentSignature.substring(0, currentCharIndex++);
+                if (currentCharIndex === currentSignature.length) {
+                    isDeleting = true;
+                    setTimeout(() => {
+                        signatureElement.style.visibility = 'hidden'; // 隐藏签名
+                        setTimeout(() => {
+                            signatureElement.style.visibility = 'visible'; // 恢复可见性
+                            type(); // 继续打字
+                        }, 1000); // 等待一段时间后恢复可见性
+                    }, 1000); // 等待一段时间后开始删除
+                } else {
+                    setTimeout(type, 150); // 打字速度
+                }
+            }
+        }
+    
+        type(); // 启动打字效果
+    </script>
 </body>
 </html>
