@@ -60,7 +60,10 @@
                         </div>
                         <div class="name-title">
                             <h1>易天华</h1>    
-                            <div id="signature"></div>                                                  
+                            <div id="signature-container">
+                                <span id="signature"></span>
+                                <span id="cursor">_</span>
+                            </div>                                          
                             <p class="subtitle">男 | 27岁 | 8年工作经验</p>  
                                                       
                         </div>
@@ -75,7 +78,7 @@
                         <div class="contact-item">
                             <i class="bi bi-wechat"></i>
                             <div class="contact-text">
-                                <span>Zephyrus51</span>
+                                <span>n0de_modules</span>
                             </div>
                         </div>
                     </div>
@@ -434,11 +437,10 @@
 
     <script>
         const signatures = [
-            "大江东去，浪淘尽，千古风流人物",
-            "人间如梦，何必问归期",
-            "人生如梦，一尊还酹江月",
-            "会当凌绝顶，一览众山小",
-            
+            "大江东去，浪淘尽，千古风流人物。",
+            "月落乌啼霜满天，江枫渔火对愁眠。",
+            "一蓑烟雨任平生，何惧浮云遮望眼。",
+            "人间如梦，何必问归期。",
         ];
     
         let currentSignatureIndex = 0;
@@ -447,10 +449,12 @@
     
         function type() {
             const signatureElement = document.getElementById("signature");
+            const cursorElement = document.getElementById("cursor");
             const currentSignature = signatures[currentSignatureIndex];
     
             if (isDeleting) {
                 signatureElement.textContent = currentSignature.substring(0, currentCharIndex--);
+                cursorElement.style.visibility = 'visible'; // 显示光标
                 if (currentCharIndex < 0) {
                     isDeleting = false;
                     currentSignatureIndex = (currentSignatureIndex + 1) % signatures.length;
@@ -461,15 +465,18 @@
             } else {
                 signatureElement.textContent = currentSignature.substring(0, currentCharIndex++);
                 if (currentCharIndex === currentSignature.length) {
+                    cursorElement.style.visibility = 'visible'; // 在最后一个字显示时显示光标
                     isDeleting = true;
                     setTimeout(() => {
+                        cursorElement.style.visibility = 'hidden'; // 隐藏光标
                         signatureElement.style.visibility = 'hidden'; // 隐藏签名
                         setTimeout(() => {
                             signatureElement.style.visibility = 'visible'; // 恢复可见性
                             type(); // 继续打字
                         }, 1000); // 等待一段时间后恢复可见性
-                    }, 1000); // 等待一段时间后开始删除
+                    }, 1000); // 在最后一个字显示后停顿1秒再开始删除
                 } else {
+                    cursorElement.style.visibility = 'visible'; // 显示光标
                     setTimeout(type, 150); // 打字速度
                 }
             }
