@@ -44,6 +44,34 @@
         <div class="floating-item"></div>
         <div class="floating-item"></div>
         <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
+        <div class="floating-item"></div>
     </div>
     <div class="container">
         <header>
@@ -64,7 +92,7 @@
                                 <span id="signature"></span>
                                 <span id="cursor">_</span>
                             </div>                                          
-                            <p class="subtitle">男 | 27岁 | 8年工作经验</p>  
+                            <p class="subtitle">男 | <span id="age"></span>岁 | <span id="workYears"></span>年工作经验</p>  
                                                       
                         </div>
                     </div>
@@ -435,6 +463,11 @@
         </section>
     </div>
 
+    <a download="yee.pdf" class="download-pdf-btn">
+        <i class="bi bi-file-earmark-pdf"></i>
+        <span>下载简历</span>
+    </a>
+
     <script>
         const signatures = [
             "大江东去，浪淘尽，千古风流人物。",
@@ -442,7 +475,10 @@
             "一蓑烟雨任平生，何惧浮云遮望眼。",
             "人间如梦，何必问归期。",
         ];
-    
+
+        // 下载按钮使用HTML的download属性自动处理下载
+        // 确保下载按钮有正确的href属性
+        document.querySelector('.download-pdf-btn').href = 'yee.pdf';
         let currentSignatureIndex = 0;
         let currentCharIndex = 0;
         let isDeleting = false;
@@ -483,6 +519,25 @@
         }
     
         type(); // 启动打字效果
+    
+    // 计算年龄和工作年限
+    function calculateAgeAndWork() {
+        const birthYear = 1997; // 出生年份
+        const workStartYear = 2016; // 工作开始年份
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        
+        // 计算年龄
+        const age = currentYear - birthYear;
+        document.getElementById('age').textContent = age;
+        
+        // 计算工作年限
+        const workYears = currentYear - workStartYear;
+        document.getElementById('workYears').textContent = workYears;
+    }
+    
+    // 页面加载时执行计算
+    window.addEventListener('load', calculateAgeAndWork);
     </script>
 </body>
 </html>
