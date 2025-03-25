@@ -92,6 +92,8 @@ header {
 
 .avatar-container {
     position: relative;
+    height: 110px;
+    overflow: visible;
 }
 
 .avatar {
@@ -267,6 +269,50 @@ header {
 
 .contact-item:hover::after {
     left: 200%;
+}
+
+/* iOS风格通知组件 */
+.ios-notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    background: rgba(30, 136, 229, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 8px 16px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 9999;
+}
+
+.ios-notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+}
+
+.notification-content i {
+    font-size: 1rem;
+    color: #4cd964;
+}
+
+.notification-text {
+    font-size: 0.85rem;
+    font-weight: 500;
 }
 
 /* 响应式调整 */
@@ -1375,99 +1421,691 @@ h1, h2, h3, h4 {
 }
 
 .avatar-container {
-    height: 110px; /* 固定高度，防止浮动 */
-    position: relative; /* 确保绝对定位的子元素相对于此元素 */
-    overflow: hidden; /* 防止内容溢出 */
+    position: relative;
+    height: 110px;
+    overflow: visible;
 }
 
+.avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid white;
+    box-shadow: 
+        0 0 20px rgba(30, 136, 229, 0.15),
+        inset 0 0 15px rgba(30, 136, 229, 0.1);
+    position: relative;
+    background: white;
+    cursor: pointer;
+}
+
+.avatar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient);
+    opacity: 0.1;
+    z-index: 1;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.avatar:hover img {
+    transform: scale(1.05);
+}
+
+/* 添加装饰环 */
+.avatar-container::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: var(--gradient);
+    opacity: 0.15;
+    z-index: -1;
+}
+
+.avatar-container::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: white;
+    z-index: -1;
+}
+
+/* 调整名字和标题的布局 */
 .name-title {
     flex: 1;
-    position: relative; /* 确保子元素绝对定位相对于此元素 */
 }
 
-#signature {
+.name-title h1 {
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
     font-size: 1.2rem;
     color: var(--text-secondary);
-    margin-top: 0.5rem;
-    font-style: italic;
-    height: 30px; /* 固定高度，保持空白位置 */
-    visibility: visible; /* 默认可见 */
-    transition: visibility 0s 1s; /* 延迟隐藏，保持空白位置 */
+    margin-bottom: 1.5rem;
+    font-weight: 500;
 }
 
-#signature-container {
-    display: inline-block; /* 使光标和签名在同一行 */
-    position: relative; 
+/* 优化联系信息样式 */
+.contact-info {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
 }
 
-#cursor {
-    display: inline; /* 确保光标与文本在同一行 */
-    font-size: 1.2rem;
-    animation: blink 1s step-end infinite; /* 闪烁效果 */
-    color: var(--text-secondary); /* 光标颜色 */
-    margin-left: 2px; /* 光标与文本之间的间距 */
+.contact-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
 }
 
-@keyframes blink {
-    50% {
-        opacity: 0; /* 闪烁效果 */
-    }
+/* 图标样式 */
+.contact-item i {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
 }
 
-/* PDF下载按钮样式 */
-.download-pdf-btn {
+/* 文字容器 */
+.contact-text {
+    position: relative;
+    overflow: hidden;
+    padding: 0.2rem 0;
+}
+
+/* 主要文字 */
+.contact-item span {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: var(--font-code);
+    display: block;
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+/* 复制提示效果 */
+.contact-item span::after {
+    content: '已复制';
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+/* 科技感装饰线 */
+.contact-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient);
+    transition: width 0.3s ease;
+    opacity: 0.5;
+}
+
+/* 悬浮效果 */
+.contact-item:hover::before {
+    width: 100%;
+}
+
+.contact-item:hover i {
+    transform: scale(1.1);
+    color: var(--secondary-color);
+}
+
+/* 点击复制效果 */
+.contact-item.copied span {
+    transform: translateY(-100%);
+}
+
+/* 添加科技感光效 */
+.contact-item::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    left: -100%;
+    transition: left 0.5s ease;
+}
+
+.contact-item:hover::after {
+    left: 200%;
+}
+
+/* iOS风格通知组件 */
+.ios-notification {
     position: fixed;
-    right: 30px;
-    bottom: 30px;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    background: rgba(30, 136, 229, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 8px 16px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 9999;
+}
+
+.ios-notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.notification-content {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 20px;
-    background: var(--primary-color);
     color: white;
-    border-radius: 50px;
-    text-decoration: none;
-    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2);
-    transition: all 0.3s ease;
-    z-index: 1000;
 }
 
-.download-pdf-btn i {
-    font-size: 1.2rem;
+.notification-content i {
+    font-size: 1rem;
+    color: #4cd964;
 }
 
-.download-pdf-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.3);
-    background: var(--secondary-color);
+.notification-text {
+    font-size: 0.85rem;
+    font-weight: 500;
 }
-
-/* 移动端适配 */
-@media (max-width: 768px) {
-    .download-pdf-btn {
-        right: 20px;
-        bottom: 20px;
-        padding: 10px 16px;
-    }
-}
-
 
 /* 响应式调整 */
 @media (max-width: 768px) {
-    .avatar-hover-preview {
-        left: 50%;
-        transform: translateX(-50%) translateY(10px);
-        width: 250px;
-    }
-    
-    .avatar-hover-preview::before {
-        left: 50%;
-        top: -8px;
-        transform: translateX(-50%) rotate(-90deg);
-    }
-    
-    .avatar:hover + .avatar-hover-preview,
-    .avatar-hover-preview:hover {
-        transform: translateX(-50%) translateY(0);
+    .contact-info {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
     }
 }
+
+/* 求职意向样式 */
+.job-intention {
+    background-color: var(--bg-light);
+    padding: 1.8rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 10px rgba(30, 136, 229, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.job-intention:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(30, 136, 229, 0.1);
+}
+
+.job-intention h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.intention-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.intention-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.intention-item i {
+    color: var(--secondary-color);
+}
+
+/* 技能部分样式重构 */
+.skills {
+    grid-area: skills;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+.skill-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 
+        0 4px 15px rgba(30, 136, 229, 0.08),
+        inset 0 0 20px rgba(255, 255, 255, 0.5);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient);
+}
+
+.skill-icon {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    background: var(--gradient);
+    box-shadow: 
+        0 4px 12px rgba(30, 136, 229, 0.2),
+        inset 0 0 15px rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.skill-content {
+    flex: 1;
+}
+
+.skill-content h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+}
+
+.skill-content p {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    margin: 0.8rem 0;
+    line-height: 1.6;
+}
+
+.skill-tag {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--primary-color);
+    border: 1px solid rgba(30, 136, 229, 0.1);
+    border-radius: 15px;
+    font-size: 0.85rem;
+    margin: 0 0.5rem 0.5rem 0;
+    transition: all 0.3s ease;
+    letter-spacing: 0.02em;
+}
+
+.skill-meter {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+    border-radius: 2px;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.meter-fill {
+    height: 100%;
+    background: var(--gradient);
+    box-shadow: 0 0 10px rgba(30, 136, 229, 0.3);
+    border-radius: 2px;
+    transition: width 1.5s ease-out;
+}
+
+/* 悬浮效果 */
+.skill-card:hover {
+    background: var(--bg-hover);
+    box-shadow: 
+        0 8px 25px rgba(30, 136, 229, 0.12),
+        inset 0 0 30px rgba(255, 255, 255, 0.8);
+}
+
+.skill-card:hover .skill-icon {
+    transform: scale(1.1);
+}
+
+.skill-tag:hover {
+    background: var(--gradient);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* 添加动画效果 */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.skill-card {
+    animation: slideIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.skill-card:nth-child(1) { animation-delay: 0.1s; }
+.skill-card:nth-child(2) { animation-delay: 0.2s; }
+.skill-card:nth-child(3) { animation-delay: 0.3s; }
+.skill-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* 章节标题优化 */
+section h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-dark);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+section h2 i {
+    color: var(--secondary-color);
+}
+
+/* 工作经历和项目经历样式 */
+.experience {
+    grid-area: experience;
+}
+
+/* 工作经历样式优化 */
+.experience-item {
+    background: linear-gradient(to right, var(--bg-light), white);
+    padding: 1.5rem;
+    border-left: 4px solid var(--primary-color);
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.experience-item::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 1.5rem;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 0 0 3px var(--secondary-color);
+}
+
+.experience-item::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 3rem;
+    bottom: -2rem;
+    width: 2px;
+    background: var(--secondary-color);
+    z-index: -1;
+}
+
+.experience-item:last-child::after {
+    display: none;
+}
+
+.company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(30, 136, 229, 0.1);
+    padding-bottom: 1rem;
+}
+
+.company-header h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.date {
+    color: white;
+    font-style: italic;
+    background: var(--gradient);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    box-shadow: var(--box-shadow);
+    font-family: var(--font-code);
+}
+
+.position {
+    color: var(--primary-dark);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.content ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.content ul li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.content ul li::before {
+    content: '▹';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.content p::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+
+.content h4 {
+    color: var(--primary-dark);
+    margin: 1.2rem 0 0.8rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+.content h4::before {
+    content: '◆';
+    color: var(--secondary-color);
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* 工作经历hover效果 */
+.experience-item:hover {
+    transform: translateX(5px);
+    box-shadow: 4px 4px 15px rgba(30, 136, 229, 0.1);
+}
+
+/* 添加工作经历动画 */
+.experience-item {
+    animation: slideIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.experience-item:nth-child(1) { animation-delay: 0.1s; }
+.experience-item:nth-child(2) { animation-delay: 0.2s; }
+.experience-item:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 教育经历样式 */
+.education {
+    grid-area: education;
+}
+
+.education-item {
+    background-color: var(--bg-light);
+    padding: 1.2rem;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(30, 136, 229, 0.1);
+}
+
+.education-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(30, 136, 229, 0.15);
+    border-color: var(--secondary-color);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
+    margin-bottom: 3rem;
+}
+
+section:nth-child(1) { animation-delay: 0.05s; }
+section:nth-child(2) { animation-delay: 0.1s; }
+section:nth-child(3) { animation-delay: 0.15s; }
+section:nth-child(4) { animation-delay: 0.2s; }
+
+/* 响应式优化 */
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "header"
+            "skills"
+            "experience"
+            "projects"
+            "education";
+        min-height: auto;
+    }
+}
+
+/* 打印样式优化 */
+@media print {
+    body {
+        background: none;
+    }
+
+    .container {
+        margin: 0;
+        padding: 1rem;
+        box-shadow: none;
+    }
+
+    .container::before {
+        display: none;
+    }
+
+    .skill-card:hover,
+    .experience-item:hover,
+    .project-item:hover,
+    .education-item:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .tech-stack span {
+        background: none;
+        border: 1px solid var(--primary-color);
+        color: var(--text-primary);
+        box-shadow: none;
+    }
+
+    .floating-bg {
+        display: none;
+    }
+}
+
+/* 添加浮动背景样式 */
+.floating-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.floating-item {
+    position: absolute;
+    width: var(--floating-item-size);
+    height: var(--floating-item-size);
+    background: var(--floating-item-color);
+    border-radius: 4px;
+    transform: rotate
