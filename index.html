@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>易天华的简历</title>
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
@@ -16,8 +17,6 @@
     </div>
     <div class="floating-bg">
         <!-- 预生成一些浮动元素 -->
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
         <div class="floating-item"></div>
         <div class="floating-item"></div>
         <div class="floating-item"></div>
@@ -476,8 +475,10 @@
         document.querySelector('.download-pdf-btn').href = 'yee.pdf';
 
         // 复制功能和通知显示
-        function showNotification() {
+        function showNotification(message = '复制成功') {
             const notification = document.getElementById('notification');
+            const notificationText = notification.querySelector('.notification-text');
+            notificationText.textContent = message;
             notification.classList.add('show');
             setTimeout(() => {
                 notification.classList.remove('show');
@@ -489,12 +490,21 @@
             item.addEventListener('click', function() {
                 const value = this.getAttribute('data-value');
                 navigator.clipboard.writeText(value).then(() => {
-                    showNotification();
+                    showNotification('复制成功');
                 }).catch(err => {
                     console.error('复制失败:', err);
                 });
             });
         });
+
+        // 为下载按钮添加点击事件
+        document.querySelector('.download-pdf-btn').addEventListener('click', function(e) {
+            // 不阻止默认下载行为
+            setTimeout(() => {
+                showNotification('下载成功');
+            }, 500);
+        });
+
         let currentSignatureIndex = 0;
         let currentCharIndex = 0;
         let isDeleting = false;
