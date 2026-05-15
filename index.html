@@ -3,853 +3,758 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>易天华的简历</title>
+    <title>WELCOME TO ASYEE.</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body>
-    <div id="notification" class="ios-notification">
-        <div class="notification-content">
-            <i class="bi bi-check-circle"></i>
-            <span class="notification-text">复制成功</span>
+
+    <!-- ============ 开机动画覆盖层 ============ -->
+    <div class="boot-overlay" id="bootOverlay">
+        <div class="boot-terminal">
+            <div class="boot-cmd-line">
+                <span class="boot-prompt">C:\MECHA\CORE&gt;</span>
+                <span class="boot-cmd-text" id="bootCmdText"></span>
+                <span class="boot-cursor" id="bootCmdCursor">_</span>
+            </div>
+            <div class="boot-body" id="bootBody">
+                <div class="boot-progress-wrap">
+                    <span class="boot-progress-label">[DOWNLD]</span>
+                    <div class="boot-progress-track" id="bootProgressTrack">
+                        <span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span>
+                        <span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span>
+                        <span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span>
+                        <span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span><span class="boot-progress-seg"></span>
+                    </div>
+                    <span class="boot-progress-pct" id="bootProgressPct">0%</span>
+                </div>
+                <div class="boot-items" id="bootItems">
+                    <div class="boot-item"><span class="boot-item-status" id="biStat0">[....]</span> PILOT_DATA.bin</div>
+                    <div class="boot-item"><span class="boot-item-status" id="biStat1">[....]</span> THREAT_MATRIX.sys</div>
+                    <div class="boot-item"><span class="boot-item-status" id="biStat2">[....]</span> COMBAT_READOUTS.dll</div>
+                    <div class="boot-item"><span class="boot-item-status" id="biStat3">[....]</span> MISSION_ARCHIVE.dat</div>
+                    <div class="boot-item"><span class="boot-item-status" id="biStat4">[....]</span> COMMS_CHANNEL.cfg</div>
+                </div>
+                <div class="boot-complete" id="bootComplete">
+                    <span>&gt; ALL SYSTEMS NOMINAL</span>
+                    <span class="boot-complete-cursor">_</span>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <!-- 主题切换器 -->
-    <div class="theme-switcher">
-        <button class="theme-toggle" title="切换主题">
-            <i class="bi bi-palette"></i>
-        </button>
-        <div class="theme-menu">
-            <button class="theme-option" data-theme="cyan" title="霓虹青色">
-                <span style="background: linear-gradient(135deg, #00f0ff, #0066ff);"></span>
-            </button>            
-            <button class="theme-option" data-theme="fire" title="火焰红橙">
-                <span style="background: linear-gradient(135deg, #ff6b35, #f7931e);"></span>
+
+    <!-- ============ 顶部状态栏 ============ -->
+    <div class="topbar">
+        <div class="topbar__group">
+            <span class="dot dot--red"></span>
+            <span class="topbar__label">THREAT</span>
+            <span class="topbar__val topbar__val--alert">LEVEL 4</span>
+            <span class="topbar__label">SYS</span>
+            <span class="topbar__val topbar__val--warn">ARMED</span>
+        </div>
+        <div class="topbar__group">
+            <span class="dot dot--green"></span>
+            <span class="topbar__label">CONN</span>
+            <span class="topbar__val topbar__val--ok">STABLE</span>
+            <span id="topbar-time"></span>
+        </div>
+        <div class="topbar__controls">
+            <!-- 灯泡亮度开关 -->
+            <button class="lightbulb-btn lightbulb-btn--on" id="lightbulbBtn" title="亮度切换">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V15c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"/></svg>
             </button>
-            <button class="theme-option" data-theme="forest" title="森林绿">
-                <span style="background: linear-gradient(135deg, #00ff88, #39ff14);"></span>
+            <!-- 色调切换齿轮 -->
+            <button class="gear-btn" id="gearBtn" title="色调切换">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
             </button>
-            <button class="theme-option" data-theme="ocean" title="海洋蓝">
-                <span style="background: linear-gradient(135deg, #00d4ff, #0099cc);"></span>
-            </button>
-            <button class="theme-option" data-theme="purple" title="紫色梦幻">
-                <span style="background: linear-gradient(135deg, #b794f6, #8b5cf6);"></span>
-            </button>
-            <button class="theme-option" data-theme="gold" title="金色奢华">
-                <span style="background: linear-gradient(135deg, #ffd700, #ffb347);"></span>
-            </button>
-            <button class="theme-option" data-theme="pink" title="粉色少女">
-                <span style="background: linear-gradient(135deg, #ff69b4, #ff1493);"></span>
-            </button>    
-            <button class="theme-option" data-theme="pixel" title="线条像素风格">
-                <span style="background: linear-gradient(135deg, #ffffff, #000000);"></span>
-            </button>
-            <button class="theme-option" data-theme="parchment" title="羊皮纸信件">
-                <span style="background: linear-gradient(135deg, #f4e4bc, #e8d5a3);"></span>
-            </button>        
+            <!-- 主题菜单 -->
+            <div class="theme-menu" id="themeMenu">
+                <button class="theme-opt theme-opt--active" data-theme="alert">
+                    <span class="theme-opt__swatch theme-opt__swatch--alert"></span> ALERT
+                </button>
+                <button class="theme-opt" data-theme="coolant">
+                    <span class="theme-opt__swatch theme-opt__swatch--cool"></span> COOLANT
+                </button>
+            </div>
         </div>
     </div>
-    <div class="floating-bg">
-        <!-- 预生成一些浮动元素 -->
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
-        <div class="floating-item"></div>
+
+    <!-- ============ 通知 ============ -->
+    <div id="notification" class="alert-toast">
+        <div class="alert-toast__content">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span class="alert-toast__msg">COPY OK</span>
+        </div>
     </div>
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="profile-header">
-                        <div class="avatar-container">
-                            <a href="https://yeehome.netlify.app/" target="_blank">
-                                <div class="avatar">
-                                    <img src="avatar.jpg" alt="易天华的头像">
-                                </div>
-                                <div class="avatar-hover-preview">
-                                    <img src="avatar.jpg" alt="头像预览">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="name-title">
-                            <h1>易天华</h1>    
-                            <div id="signature-container">
-                                <span id="signature"></span>
-                                <span id="cursor">_</span>
-                            </div>                                          
-                            <p class="subtitle">男 | <span id="age"></span>岁 | <span id="workYears"></span>年工作经验</p>  
-                                                      
-                        </div>
-                    </div>
-                    <div class="contact-info">
-                        <div class="contact-item" data-value="17621765272">
-                            <i class="bi bi-phone"></i>
-                            <div class="contact-text">
-                                <span>17621765272</span>
-                            </div>
-                        </div>
-                        <div class="contact-item" data-value="n0de_modules">
-                            <i class="bi bi-wechat"></i>
-                            <div class="contact-text">
-                                <span>configurat1on</span>
-                            </div>
-                        </div>
-                    </div>
+
+    <div class="container" id="mainContent">
+
+        <!-- ============ 侧边栏 ============ -->
+        <aside class="side-rail">
+            <div class="panel">
+                <div class="panel__header">
+                    <span class="dot dot--orange"></span>
+                    PILOT DATA
+                    <span class="panel__id">PD-001</span>
+                    <span class="panel__hex">0x7F</span>
                 </div>
-                <div class="header-right">
-                    <div class="job-intention">
-                        <h3>求职意向</h3>
-                        <div class="intention-grid">
-                            <div class="intention-item">
-                                <i class="bi bi-briefcase"></i>
-                                <span class="label">期望岗位：</span>
-                                <div class="intention-detail">
-                                    <span class="primary">.NET开发工程师</span>
-                                    <div class="sub-skills">
-                                        <span>C#/.NET全栈开发</span>
-                                        <span>UniApp/Vue开发</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="intention-item">
-                                <i class="bi bi-tools"></i>
-                                <span class="label">技术方向：</span>
-                                <div class="intention-detail">
-                                    <div class="sub-skills">
-                                        <span>WinForm开发</span>
-                                        <span>WebAPI</span>
-                                        <span>跨平台开发</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="intention-item">
-                                <i class="bi bi-currency-dollar"></i>
-                                <span class="label">期望薪资：</span>
-                                <span>15-20K</span>
-                            </div>
-                        </div>
+                <div class="panel__body">
+                    <div class="pilot-avatar">
+                        <a href="https://yeehome.netlify.app/" target="_blank">
+                            <img src="avatar.jpg" alt="易天华">
+                        </a>
+                    </div>
+                    <div class="pilot-name">易天华</div>
+
+                    <div class="data-row">
+                        <span class="data-row__k">TEL</span>
+                        <span class="data-row__v" data-copy="17621765272" title="点击复制">17621765272</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-row__k">WECHAT</span>
+                        <span class="data-row__v" data-copy="n0de_modules" title="点击复制">configurat1on</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-row__k">STATUS</span>
+                        <span class="data-row__v data-row__v--ok">ACTIVE</span>
+                    </div>
+
+                    <div class="mech-divider"></div>
+
+                    <div class="data-row">
+                        <span class="data-row__k">BIRTH</span>
+                        <span class="data-row__v">1997</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-row__k">AGE</span>
+                        <span class="data-row__v" id="railAge">--</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-row__k">COMBAT EXP</span>
+                        <span class="data-row__v" id="railWorkYears">--</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-row__k">EDU</span>
+                        <span class="data-row__v">专科</span>
                     </div>
                 </div>
             </div>
-        </header>
 
-        <section class="skills">
-            <h2><i class="bi bi-star"></i>核心技能</h2>
-            <div class="skills-grid">
-                <div class="skill-card" data-category="backend">
-                    <div class="skill-icon">
-                        <i class="bi bi-code-square"></i>
-                    </div>
-                    <div class="skill-content">
-                        <h3>后端开发</h3>
-                        <div class="skill-tag">.NET Core</div>
-                        <div class="skill-tag">C/S架构</div>
-                        <div class="skill-tag">WCF</div>
-                        <p>8年开发经验，精通C#/.NET技术栈，深入理解面向对象设计原则</p>
-                        <div class="skill-meter">
-                            <div class="meter-fill" style="width: 95%"></div>
-                        </div>
-                    </div>
-                </div>
+            <!-- SVG 齿轮装饰 -->
+            <svg class="side-gear-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="currentColor" stroke-width="2.5" fill="none">
+                    <circle cx="50" cy="50" r="28"/>
+                    <circle cx="50" cy="50" r="14"/>
+                    <rect x="47" y="14" width="6" height="14" rx="2"/>
+                    <rect x="47" y="72" width="6" height="14" rx="2"/>
+                    <rect x="14" y="47" width="14" height="6" rx="2"/>
+                    <rect x="72" y="47" width="14" height="6" rx="2"/>
+                    <rect x="26" y="26" width="12" height="6" rx="2" transform="rotate(45 32 29)"/>
+                    <rect x="62" y="26" width="12" height="6" rx="2" transform="rotate(-45 68 29)"/>
+                    <rect x="26" y="68" width="12" height="6" rx="2" transform="rotate(-45 32 71)"/>
+                    <rect x="62" y="68" width="12" height="6" rx="2" transform="rotate(45 68 71)"/>
+                </g>
+                <circle cx="50" cy="50" r="6" fill="currentColor"/>
+            </svg>
 
-                <div class="skill-card" data-category="architecture">
-                    <div class="skill-icon">
-                        <i class="bi bi-diagram-3"></i>
-                    </div>
-                    <div class="skill-content">
-                        <h3>架构设计</h3>
-                        <div class="skill-tag">ORM</div>
-                        <div class="skill-tag">IoC</div>
-                        <div class="skill-tag">设计模式</div>
-                        <p>精通ORM框架、依赖注入、设计模式，具备优秀的架构设计能力</p>
-                        <div class="skill-meter">
-                            <div class="meter-fill" style="width: 90%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-card" data-category="database">
-                    <div class="skill-icon">
-                        <i class="bi bi-database"></i>
-                    </div>
-                    <div class="skill-content">
-                        <h3>数据库开发</h3>
-                        <div class="skill-tag">Oracle</div>
-                        <div class="skill-tag">SQL Server</div>
-                        <div class="skill-tag">性能调优</div>
-                        <p>精通数据库开发与优化，具备复杂SQL编写和性能调优能力</p>
-                        <div class="skill-meter">
-                            <div class="meter-fill" style="width: 92%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-card" data-category="frontend">
-                    <div class="skill-icon">
-                        <i class="bi bi-window"></i>
-                    </div>
-                    <div class="skill-content">
-                        <h3>前端开发</h3>
-                        <div class="skill-tag">Vue</div>
-                        <div class="skill-tag">Element UI</div>
-                        <div class="skill-tag">JavaScript</div>
-                        <p>熟练使用Vue.js框架，具备现代前端开发能力</p>
-                        <div class="skill-meter">
-                            <div class="meter-fill" style="width: 85%"></div>
-                        </div>
-                    </div>
-                </div>
+            <!-- 威胁等级 -->
+            <div class="threat-block">                
+                <a download="yee.pdf" href="yee.pdf" class="threat-block__label">       
+                    <div class="threat-block__label">/// SEVERE WARNING ///</div>             
+                    CHECK EXPORT BRIEFING
+                    <div class="threat-block__label" style="margin-top:2px;">MALFUNCTION</div>
+                </a>
+                
             </div>
-        </section>
 
-        <section class="experience">
-            <h2><i class="bi bi-briefcase"></i>工作经历</h2>
             
-            <div class="experience-item">
-                <div class="company-header">
-                    <h3>深圳鹏锐信息技术股份有限公司</h3>
-                    <span class="date">2024.05-至今</span>
-                </div>
-                <p class="position">.NET 模块负责人，技术组长</p>
-                <div class="content">
-                    <p>国企内网开发，入职第一个月熟悉业务与客户理解能达成一致，解决多个历史遗留问题得到甲方多位领导认可，协调团队完成开发任务，编写小脚本、操作手册帮助同事高速有效的解决重复性问题和理解业务</p>
+        </aside>
+
+        <!-- ============ 头部：驾驶员档案 (无头像，右侧仪表盘) ============ -->
+        <div class="panel header-pnl">
+            <div class="panel__header">
+                <span class="dot dot--orange"></span>
+                OPERATOR DOSSIER
+                <span class="panel__id">OD-001</span>
+                <span class="panel__hex">0xA3</span>
+            </div>
+            <div class="panel__body">
+                <div class="header-inner">
+                    <div class="header-main">
+                        <div class="header-name">易天华</div>
+                        <div class="header-tags">
+                            <span class="tag tag--alert">.NET DEV</span>
+                            <span class="tag tag--ok">8Y+ COMBAT</span>
+                            <span class="tag">C# FULLSTACK</span>
+                            <span class="tag tag--cool">UNIAPP/VUE</span>
+                        </div>
+                        <div class="sig-wrap">
+                            <span class="sig-prompt">$</span>
+                            <span id="signature"></span>
+                            <span id="cursor">_</span>
+                        </div>
+                    </div>
+                    <!-- 仪表盘组 -->
+                    <div class="gauges-group">
+                        <div class="gauge-dial">
+                            <svg viewBox="0 0 56 56" width="56" height="56">
+                                <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" stroke-width="3" opacity="0.15" stroke-dasharray="150" stroke-dashoffset="0"/>
+                                <circle cx="28" cy="28" r="24" fill="none" stroke="var(--warn)" stroke-width="3" stroke-linecap="round" stroke-dasharray="150" stroke-dashoffset="15" transform="rotate(-90 28 28)"/>
+                                <circle cx="28" cy="28" r="16" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.3"/>
+                                <line x1="28" y1="28" x2="28" y2="10" stroke="var(--warn)" stroke-width="2" stroke-linecap="round" transform="rotate(-45 28 28)"/>
+                                <circle cx="28" cy="28" r="3" fill="var(--warn)"/>
+                            </svg>
+                            <div class="gauge-dial__val">.NET DEV</div>
+                            <div class="gauge-dial__lbl">POSITION</div>
+                        </div>
+                        <div class="gauge-dial">
+                            <svg viewBox="0 0 56 56" width="56" height="56">
+                                <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" stroke-width="3" opacity="0.15"/>
+                                <circle cx="28" cy="28" r="24" fill="none" stroke="var(--ok)" stroke-width="3" stroke-linecap="round" stroke-dasharray="150" stroke-dashoffset="30" transform="rotate(-90 28 28)"/>
+                                <rect x="20" y="24" width="16" height="14" rx="2" fill="none" stroke="var(--ok)" stroke-width="1.5" opacity="0.6"/>
+                                <text x="28" y="34" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="var(--ok)">15K+</text>
+                                <circle cx="28" cy="28" r="3" fill="var(--ok)"/>
+                            </svg>
+                            <div class="gauge-dial__val">15-20K</div>
+                            <div class="gauge-dial__lbl">BOUNTY</div>
+                        </div>
+                        <div class="gauge-dial">
+                            <svg viewBox="0 0 56 56" width="56" height="56">
+                                <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" stroke-width="3" opacity="0.15"/>
+                                <circle cx="28" cy="28" r="24" fill="none" stroke="var(--cool)" stroke-width="3" stroke-linecap="round" stroke-dasharray="150" stroke-dashoffset="40" transform="rotate(-90 28 28)"/>
+                                <polygon points="28,6 32,22 44,22 34,30 38,48 28,38 18,48 22,30 12,22 24,22" fill="var(--cool)" opacity="0.3" transform="scale(0.4) translate(38 8)"/>
+                                <circle cx="28" cy="28" r="3" fill="var(--cool)"/>
+                            </svg>
+                            <div class="gauge-dial__val">SHANGHAI</div>
+                            <div class="gauge-dial__lbl">SECTOR</div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="experience-item">
-                <div class="company-header">
-                    <h3>浙大网新科技股份有限公司</h3>
-                    <span class="date">2019.07-2024.04</span>
+        <!-- ============ 威胁评估 ============ -->
+        <div class="panel panel--threat threat-pnl">
+            <div class="panel__header">
+                <span class="dot dot--red"></span>
+                CAPABILITY ASSESSMENT
+                <span class="panel__id">CA-001</span>
+                <span class="panel__hex">0xFF</span>
+            </div>
+            <div class="panel__body">
+                <div class="threat-grid">
+                    <div class="threat-item threat-item--critical">
+                        <div class="threat-item__l">PRIMARY WEAPON</div>
+                        <div class="threat-item__v">C#/.NET</div>
+                    </div>
+                    <div class="threat-item">
+                        <div class="threat-item__l">FRAMEWORK</div>
+                        <div class="threat-item__v">WinForm</div>
+                    </div>
+                    <div class="threat-item">
+                        <div class="threat-item__l">INTERFACE</div>
+                        <div class="threat-item__v">WebAPI</div>
+                    </div>
+                    <div class="threat-item">
+                        <div class="threat-item__l">CROSS-PLATFORM</div>
+                        <div class="threat-item__v">UniApp</div>
+                    </div>
+                    <div class="threat-item">
+                        <div class="threat-item__l">FRONTEND AUX</div>
+                        <div class="threat-item__v">Vue 2/3</div>
+                    </div>
+                    <div class="threat-item">
+                        <div class="threat-item__l">COMMS</div>
+                        <div class="threat-item__v">WCF</div>
+                    </div>
                 </div>
-                <p class="position">C#开发工程师</p>
-                <div class="content">
-                    <h4>主要职责：</h4>
-                    <ul>
-                        <li>需求调研：与客户开会确认模块需求，实地参观业务场景，完成业务流程逻辑走向图</li>
-                        <li>FS开发文档：根据功能清单拟出功能界面及业务逻辑</li>
-                        <li>开发实现：使用vs2017、oracle、GIS、Dev Express等工具进行开发</li>
-                        <li>功能测试与交付：确保业务逻辑全部通过测试后交付给客户</li>
-                    </ul>
+                <div class="threat-bar-wrap">
+                    <span class="threat-bar-label">COMBAT READINESS</span>
+                    <div class="threat-bar" title="95%">
+                        <span class="threat-bar__seg"></span><span class="threat-bar__seg"></span>
+                        <span class="threat-bar__seg"></span><span class="threat-bar__seg"></span>
+                        <span class="threat-bar__seg"></span><span class="threat-bar__seg"></span>
+                        <span class="threat-bar__seg"></span><span class="threat-bar__seg"></span>
+                        <span class="threat-bar__seg"></span><span class="threat-bar__seg threat-bar__seg--dim"></span>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="experience-item">
-                <div class="company-header">
-                    <h3>上海汉得信息技术股份有限公司</h3>
-                    <span class="date">2016.06-2019.07</span>
-                </div>
-                <p class="position">C#开发工程师</p>
-                <div class="content">
-                    <h4>开发场景：</h4>
-                    <p>根据客户客制化需求驻场开发</p>
-                    <h4>开发工具：</h4>
-                    <ul>
-                        <li>VS2012/2008：用于开发PC(winform)，PDA(WIN CE)两终端</li>
-                        <li>Eclipse：用于开发电视看板</li>
-                        <li>IDEA/WSDL：用于开发webservice接口</li>
-                        <li>Oracle：用于开发存储过程，视图，触发器，定时job</li>
-                        <li>SVN/VSS/TFS：代码版本管控</li>
-                    </ul>
-                    <h4>职责：</h4>
-                    <ul>
-                        <li>功能测试与交付</li>
-                        <li>项目运维</li>
-                        <li>新人培训</li>
-                    </ul>
+        <!-- ============ 技能：能量输出 ============ -->
+        <div class="panel skills-pnl">
+            <div class="panel__header">
+                <span class="dot dot--cyan"></span>
+                CORE SYSTEMS OUTPUT
+                <span class="panel__id">CS-001</span>
+                <span class="panel__hex">0x3C</span>
+            </div>
+            <div class="panel__body">
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <div class="skill-card__head">
+                            <span class="dot dot--red"></span>
+                            BACKEND
+                            <span class="skill-card__pct">95%</span>
+                        </div>
+                        <svg class="skill-wave-svg" viewBox="0 0 300 20" preserveAspectRatio="none">
+                            <path d="M0,10 L10,10 L15,3 L20,17 L25,5 L30,15 L35,7 L40,13 L45,4 L50,16 L55,8 L60,12 L65,4 L70,16 L75,6 L80,15 L85,7 L90,13 L95,3 L100,14 L105,5 L110,16 L115,6 L120,12 L125,5 L130,15 L135,7 L140,14 L145,3 L150,10 L155,15 L160,6 L165,13 L170,5 L175,14 L180,8 L185,16 L190,5 L195,12 L200,7 L205,14 L210,6 L215,15 L220,4 L225,13 L230,8 L235,16 L240,5 L245,12 L250,6 L255,14 L260,7 L265,15 L270,4 L275,11 L280,6 L285,14 L290,5 L295,13 L300,10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <div class="energy-bar" title="95%">
+                            <span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--crit"></span><span class="energy-bar__cell"></span><span class="energy-bar__cell"></span>
+                        </div>
+                        <div class="skill-card__tags">
+                            <span class="tag">.NET Core</span><span class="tag">C/S架构</span><span class="tag">WCF</span>
+                        </div>
+                        <p class="skill-card__desc">8年C#/.NET开发，精通面向对象设计与企业级架构</p>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-card__head">
+                            <span class="dot dot--cyan"></span>
+                            ARCHITECTURE
+                            <span class="skill-card__pct">90%</span>
+                        </div>
+                        <svg class="skill-wave-svg" viewBox="0 0 300 20" preserveAspectRatio="none">
+                            <path d="M0,12 L12,12 L18,4 L24,16 L30,7 L36,13 L42,5 L48,15 L54,8 L60,14 L66,3 L72,15 L78,9 L84,13 L90,4 L96,16 L102,8 L108,12 L114,5 L120,14 L126,10 L132,15 L138,6 L144,11 L150,9 L156,15 L162,5 L168,14 L174,7 L180,12 L186,4 L192,16 L198,8 L204,13 L210,6 L216,14 L222,9 L228,15 L234,5 L240,11 L246,7 L252,14 L258,8 L264,16 L270,6 L276,12 L282,5 L288,15 L294,9 L300,10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <div class="energy-bar" title="90%">
+                            <span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell energy-bar__cell--cool"></span><span class="energy-bar__cell"></span><span class="energy-bar__cell"></span><span class="energy-bar__cell"></span>
+                        </div>
+                        <div class="skill-card__tags">
+                            <span class="tag">ORM</span><span class="tag">IoC</span><span class="tag">设计模式</span>
+                        </div>
+                        <p class="skill-card__desc">精通ORM框架、依赖注入，具备优秀的架构设计能力</p>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-card__head">
+                            <span class="dot dot--orange"></span>
+                            DATABASE
+                            <span class="skill-card__pct">92%</span>
+                        </div>
+                        <svg class="skill-wave-svg" viewBox="0 0 300 20" preserveAspectRatio="none">
+                            <path d="M0,8 L8,8 L14,2 L20,14 L26,6 L32,12 L38,5 L44,16 L50,8 L56,12 L62,4 L68,14 L74,9 L80,15 L86,5 L92,10 L98,7 L104,15 L110,6 L116,11 L122,4 L128,16 L134,8 L140,13 L146,5 L152,14 L158,7 L164,12 L170,3 L176,15 L182,9 L188,14 L194,5 L200,10 L206,6 L212,15 L218,8 L224,13 L230,5 L236,16 L242,8 L248,11 L254,4 L260,14 L266,7 L272,15 L278,6 L284,11 L290,5 L296,14 L300,9" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <div class="energy-bar" title="92%">
+                            <span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell"></span><span class="energy-bar__cell"></span><span class="energy-bar__cell"></span>
+                        </div>
+                        <div class="skill-card__tags">
+                            <span class="tag">Oracle</span><span class="tag">SQL Server</span><span class="tag">性能调优</span>
+                        </div>
+                        <p class="skill-card__desc">精通数据库开发与优化，SQL编写与性能调优能力突出</p>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-card__head">
+                            <span class="dot dot--green"></span>
+                            FRONTEND
+                            <span class="skill-card__pct">85%</span>
+                        </div>
+                        <svg class="skill-wave-svg" viewBox="0 0 300 20" preserveAspectRatio="none">
+                            <path d="M0,10 L10,10 L16,5 L22,14 L28,7 L34,12 L40,6 L46,15 L52,9 L58,11 L64,4 L70,14 L76,10 L82,15 L88,6 L94,11 L100,8 L106,15 L112,7 L118,12 L124,5 L130,14 L136,9 L142,16 L148,7 L154,10 L160,6 L166,14 L172,8 L178,13 L184,5 L190,15 L196,7 L202,11 L208,4 L214,14 L220,10 L226,15 L232,6 L238,11 L244,7 L250,14 L256,8 L262,16 L268,6 L274,12 L280,5 L286,14 L292,9 L300,10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <div class="energy-bar" title="85%">
+                            <span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell energy-bar__cell--on"></span><span class="energy-bar__cell"></span><span class="energy-bar__cell"></span><span class="energy-bar__cell"></span>
+                        </div>
+                        <div class="skill-card__tags">
+                            <span class="tag">Vue</span><span class="tag">Element UI</span><span class="tag">JavaScript</span>
+                        </div>
+                        <p class="skill-card__desc">熟练Vue.js框架，具备现代前端开发能力</p>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section class="projects">
-            <h2><i class="bi bi-folder"></i>项目经历</h2>
-            
-            <div class="project-item">
-                <div class="project-header">
-                    <h3>深圳中广核工程MES-NICE系统</h3>
-                    <span class="project-meta">技术组长 | 2024.05-至今</span>
+        <!-- ============ 作战日志 ============ -->
+        <div class="panel exp-pnl">
+            <div class="panel__header">
+                <span class="dot dot--orange"></span>
+                DEPLOYMENT LOG
+                <span class="panel__id">DL-001</span>
+                <span class="panel__hex">0x2B</span>
+            </div>
+            <div class="panel__body">
+                <div class="log-entry">
+                    <div class="log-stamp">
+                        <span class="log-stamp__date">2024.05 - NOW</span>
+                        <span class="log-stamp__status log-stamp__status--active">● ACTIVE</span>
+                    </div>
+                    <div class="log-body">
+                        <div class="log-body__title">深圳鹏锐信息技术股份有限公司</div>
+                        <div class="log-body__role">.NET 模块负责人 / 技术组长</div>
+                        <div class="log-body__text">国企内网开发，入职首月梳理业务与客户达成一致，解决多个历史遗留问题获甲方多位领导认可。协调团队完成开发任务，编写脚本与操作手册帮助同事高效解决重复性问题。</div>
+                    </div>
                 </div>
-                <div class="project-content">
-                    <p class="project-desc">全国核岛建设工程项目，通过MES系统进行数字化转型。</p>
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <h4>主要工作：</h4>
+                <div class="log-entry">
+                    <div class="log-stamp">
+                        <span class="log-stamp__date">2019.07 - 2024.04</span>
+                        <span class="log-stamp__status log-stamp__status--done">COMPLETED</span>
+                    </div>
+                    <div class="log-body">
+                        <div class="log-body__title">浙大网新科技股份有限公司</div>
+                        <div class="log-body__role">C# 开发工程师</div>
+                        <div class="log-body__text">
                             <ul>
-                                <li>该项目pc端通过vs开发winform 然后使用插件挂载到ir浏览器使用，其中使用wcf通讯服务</li>
-                                <li>主要是实现第三方接口（如海康人脸识别）和uniapp的api调用</li>
+                                <li>需求调研：与客户确认模块需求，实地参观业务场景，绘制流程走向图</li>
+                                <li>FS开发文档：根据功能清单拟定功能界面及业务逻辑</li>
+                                <li>开发实现：VS2017 + Oracle + GIS + DevExpress</li>
+                                <li>功能测试与交付：全逻辑通过后交付客户</li>
                             </ul>
                         </div>
-                        <div class="detail-item">
-                            <h4>技术栈：</h4>
-                            <div class="tech-stack">
-                                <span>wcf</span>
-                                <span>webservice</span>
-                                <span>DEV EXPRESS v11</span>
-                                <span>SVN/GITLAB</span>
-                                <span>DBeaver</span>
-                                <span>VS 2012</span>
-                                <span>uniapp/vue2.0</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <!-- 项目经历详细补充段落开始 -->
-                <div class="project-ex-detail experience-item">
-                    <div class="content">
-                        <h4>将IIS后台任务重写为Windows服务，稳定性与可靠性大幅提升</h4>
-                        <p>主导完成了将原有基于IIS的后台定时任务重构为独立的Windows服务程序，带来如下优势：
-                        1. 稳定性大幅提升：独立进程运行，避免IIS回收和Web服务异常导致的任务中断。
-                        2. 任务可靠性增强：自定义错误处理与重试机制，常驻内存，避免冷启动延迟。
-                        3. 资源管理高效：资源分配独立，隔离性好，避免高负载拖垮Web服务。
-                        4. 定时精度高：采用原生定时API，毫秒级定时，满足绝对时间点执行需求。
-                        5. 扩展性与维护性优：专注定时任务逻辑，调试部署简单，易于集成本地/硬件功能。
-                        6. 安全性可控：低权限账户运行，减少攻击面，提升安全性。</p>
-                        <h4>优化Aspose.Word写入文档三方库，性能与兼容性显著提升</h4>
-                        <p>优化Aspose.Words文档写入相关三方库，提升如下：
-                        1. 内存占用大幅降低：直接用文件流插入图片，减少内存消耗和GC压力，降低崩溃风险。
-                        2. 图片质量和兼容性提升：保留原图格式，Aspose自动适配，显示效果与原图一致。
-                        3. 处理速度提升：流式读取，省去中间转换，批量插入速度提升明显。
-                        4. 代码简洁易维护：分支清晰，无需反复处理图片压缩和格式转换。</p>
-                        <h4>开发uniapp静默更新，无感知更新，用户体验提升显著</h4>
-                        <p>开发uniapp静默更新机制，极大提升用户体验和系统可靠性：
-                        1. 用户体验：后台自动完成更新，用户无感知，操作连续性强。
-                        2. 功能覆盖：突破热更新原生限制，支持前端+原生层全量更新。
-                        3. 更新可靠性：后台自动检测、原子替换和回滚，确保版本一致性。
-                        4. 跨平台一致性：基于各平台原生机制，合规适配多端。
-                        5. 安全性：官方签名、哈希校验和HTTPS加密，防止恶意篡改。</p>
-                        <h4>新增后台SM2加密+Token鉴权，解决WebService接口安全问题</h4>
-                        <p>实现后台SM2加密与Token鉴权机制，提升接口安全性：
-                        1. SM2加密：保障数据传输与存储机密性，满足国产化安全合规要求。
-                        2. Token鉴权：无状态快速验证身份与权限，细粒度控制访问，防止伪造。
-                        3. 两者结合：数据安全+访问安全闭环，兼顾高安全性与系统性能。</p>
+                <div class="log-entry">
+                    <div class="log-stamp">
+                        <span class="log-stamp__date">2016.06 - 2019.07</span>
+                        <span class="log-stamp__status log-stamp__status--done">COMPLETED</span>
+                    </div>
+                    <div class="log-body">
+                        <div class="log-body__title">上海汉得信息技术股份有限公司</div>
+                        <div class="log-body__role">C# 开发工程师</div>
+                        <div class="log-body__text">根据客制化需求驻场开发。使用 VS2012/2008 开发 WinForm 与 WinCE PDA 双端，Eclipse 开发电视看板，Oracle 开发存储过程/视图/触发器/定时Job。</div>
                     </div>
                 </div>
-                <!-- 项目经历详细补充段落结束 -->
             </div>
+        </div>
 
-            <div class="project-item">
-                <div class="project-header">
-                    <h3>金东纸业A+MES项目</h3>
-                    <span class="project-meta">驻场开发 | 2019.07-至今</span>
-                </div>
-                <div class="project-content">
-                    <p class="project-desc">主要负责质量模块，接口开发</p>
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <h4>技术栈：</h4>
-                            <div class="tech-stack">
-                                <span>VS 2017</span>
-                                <span>Oracle</span>
-                                <span>GIS</span>
-                                <span>IDEA</span>
-                                <span>DevExpress</span>
-                                <span>FineReport</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- ============ 任务档案表 ============ -->
+        <div class="panel proj-pnl warn-stripe">
+            <div class="panel__header">
+                <span class="dot dot--cyan"></span>
+                MISSION ARCHIVE
+                <span class="panel__id">MA-001</span>
+                <span class="panel__hex">0xD4</span>
             </div>
+            <div class="panel__body">
+                <table class="proj-table">
+                    <thead>
+                        <tr><th class="td-idx">#</th><th>MISSION</th><th>ROLE</th><th>TIMELINE</th><th class="td-tech">TECH</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-detail="proj-0"><td class="td-idx">01</td><td class="td-name">中广核MES-NICE系统</td><td class="td-role">技术组长</td><td class="td-time">2024.05-至今</td><td class="td-tech">wcf / webservice / DEV EXPRESS / uniapp</td></tr>
+                        <tr data-detail="proj-1"><td class="td-idx">02</td><td class="td-name">金东纸业A+MES项目</td><td class="td-role">驻场开发</td><td class="td-time">2019.07-2024.05</td><td class="td-tech">Oracle / GIS / DevExpress</td></tr>
+                        <tr data-detail="proj-2"><td class="td-idx">03</td><td class="td-name">荣庆物流项目</td><td class="td-role">技术负责人</td><td class="td-time">2019.03-2019.06</td><td class="td-tech">MySQL / DevExpress</td></tr>
+                        <tr data-detail="proj-3"><td class="td-idx">04</td><td class="td-name">浦东T3视频监控</td><td class="td-role">技术负责人</td><td class="td-time">2019.02-2019.04</td><td class="td-tech">PostgreSQL / VS 2012</td></tr>
+                        <tr data-detail="proj-4"><td class="td-idx">05</td><td class="td-name">汇众MES制造项目</td><td class="td-role">驻场开发</td><td class="td-time">2018.11-2019.03</td><td class="td-tech">Oracle / SOAP / IDEA</td></tr>
+                        <tr data-detail="proj-5"><td class="td-idx">06</td><td class="td-name">联影医疗MES项目</td><td class="td-role">驻场开发</td><td class="td-time">2018.05-2018.11</td><td class="td-tech">Oracle / TFS / 蓝牙打印</td></tr>
+                        <tr data-detail="proj-6"><td class="td-idx">07</td><td class="td-name">福耀巴士玻璃MES</td><td class="td-role">驻场开发</td><td class="td-time">2017.02-2018.05</td><td class="td-tech">Oracle / Eclipse / 报表生成器</td></tr>
+                        <tr data-detail="proj-7"><td class="td-idx">08</td><td class="td-name">美芝精密MES项目</td><td class="td-role">驻场开发</td><td class="td-time">2016.06-2017.02</td><td class="td-tech">Oracle / Eclipse</td></tr>
+                    </tbody>
+                </table>
 
-            <div class="project-item">
-                <div class="project-header">
-                    <h3>上海荣庆物流项目</h3>
-                    <span class="project-meta">技术负责人 | 2019.03-2019.06</span>
+                <div class="proj-detail" id="proj-0">
+                    <h4>IIS后台任务→Windows服务重写</h4>
+                    <p>将IIS后台定时任务重构为Windows服务：独立进程避免IIS回收中断，自定义重试机制增强可靠性，资源隔离避免拖垮Web服务，毫秒级定时精度满足绝对时间点需求，低权限运行减少攻击面。</p>
+                    <h4>Aspose.Words文档写入优化</h4>
+                    <p>文件流直插图片减少内存与GC压力，保留原图格式Aspose自动适配，流式读取省去中间转换使批量插入速度明显提升，代码分支清晰无需反复处理压缩。</p>
+                    <h4>UniApp静默更新</h4>
+                    <p>后台自动完成更新用户无感知，支持前端+原生层全量更新，原子替换与回滚确保版本一致性，跨平台合规适配，HTTPS加密+哈希校验+官方签名防篡改。</p>
+                    <h4>SM2加密+Token鉴权</h4>
+                    <p>SM2保障数据机密性满足国产化合规，Token无状态验证实现细粒度权限控制，数据安全+访问安全闭环，兼顾高安全与系统性能。</p>
                 </div>
-                <div class="project-content">
-                    <p class="project-desc">负责需求调研，开发任务清单整理，任务分配，培训新人</p>
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <h4>技术栈：</h4>
-                            <div class="tech-stack">
-                                <span>VS 2017</span>
-                                <span>MySQL</span>
-                                <span>DevExpress</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="proj-detail" id="proj-1"><h4>质量模块开发</h4><p>负责质量模块全流程开发，涵盖检验标准管理、质量数据采集、SPC统计分析、不合格品处理等子模块。使用 Oracle 存储过程实现复杂业务逻辑。</p><h4>接口开发</h4><p>开发与SAP、LIMS等外部系统的数据接口，保证质量数据在各系统间的实时同步与一致性。GIS实现厂区地图与质量监控点可视化。</p></div>
+                <div class="proj-detail" id="proj-2"><h4>需求调研与任务分配</h4><p>负责物流系统需求调研，整理开发任务清单，制定开发计划并分配任务。培训新人熟悉业务流程与开发规范。</p></div>
+                <div class="proj-detail" id="proj-3"><h4>视频监控系统</h4><p>技术负责人，负责系统架构设计与核心模块开发。使用 PostgreSQL 存储监控数据，VS2012 开发 WinForm 客户端。</p></div>
+                <div class="proj-detail" id="proj-4"><h4>接口维护</h4><p>负责开发接口维护与新人培训。使用 IDEA + Oracle + SOAP 进行 Webservice 接口开发与维护。</p></div>
+                <div class="proj-detail" id="proj-5"><h4>仓储模块 + 蓝牙打印</h4><p>自主开发可配置便携式蓝牙打印模块，支持多种标签模板的动态配置与批量打印。仓储模块涵盖入库、出库、盘点、移库全流程。</p></div>
+                <div class="proj-detail" id="proj-6"><h4>物流模块 + 报表生成器</h4><p>开发可配置报表代码生成器，通过模板引擎自动生成报表代码，大幅减少重复开发工作量。物流模块涵盖车辆调度、路线规划、运单管理。</p></div>
+                <div class="proj-detail" id="proj-7"><h4>设备模块</h4><p>负责设备模块开发与初验问题清单修改。涵盖设备台账、点检保养、维修工单、备件管理等功能。</p></div>
             </div>
+        </div>
 
-            <div class="project-item">
-                <div class="project-header">
-                    <h3>上海浦东T3航站楼视频监控项目</h3>
-                    <span class="project-meta">技术负责人 | 2019.02-2019.04</span>
-                </div>
-                <div class="project-content">
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <h4>技术栈：</h4>
-                            <div class="tech-stack">
-                                <span>VS 2012</span>
-                                <span>PostgreSQL</span>
-                                <span>SVN</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- ============ 教育 ============ -->
+        <div class="panel edu-pnl">
+            <div class="panel__header">
+                <span class="dot dot--green"></span>
+                TRAINING RECORD
+                <span class="panel__id">TR-001</span>
+                <span class="panel__hex">0x19</span>
             </div>
+            <div class="panel__body">
+                <p class="edu-line">计算机科学与技术 | 专科 | 2017-2020</p>
+            </div>
+        </div>
 
-            <div class="project-item">
-                <div class="project-header">
-                    <h3>上海汇众MES制造项目</h3>
-                    <span class="project-meta">驻场开发 | 2018.11-2019.03</span>
-                </div>
-                <div class="project-content">
-                    <p class="project-desc">负责开发接口维护，新人培训</p>
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <h4>技术栈：</h4>
-                            <div class="tech-stack">
-                                <span>IDEA</span>
-                                <span>Oracle</span>
-                                <span>SVN</span>
-                                <span>SOAP</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-item">
-                <div class="project-header">
-                    <h3>上海联影医疗MES项目</h3>
-                    <span class="project-meta">驻场开发 | 2018.05-2018.11</span>
-                </div>
-                <div class="project-content">
-                    <p class="project-desc">负责仓储模块开发，自主开发可配置便携式蓝牙打印模块</p>
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <h4>技术栈：</h4>
-                            <div class="tech-stack">
-                                <span>VS 2012</span>
-                                <span>Oracle</span>
-                                <span>TFS</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-item">
-                <div class="project-header">
-                    <h3>福耀巴士玻璃MES项目</h3>
-                    <span class="project-meta">驻场开发 | 2017.02-2018.05</span>
-                </div>
-                <div class="project-content">
-                    <p class="project-desc">负责物流模块和报表模块开发，开发可配置报表代码生成器</p>
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <h4>技术栈：</h4>
-                            <div class="tech-stack">
-                                <span>VS 2012</span>
-                                <span>Oracle</span>
-                                <span>SVN</span>
-                                <span>Eclipse</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-item">
-                <div class="project-header">
-                    <h3>安徽美芝精密制造MES项目</h3>
-                    <span class="project-meta">驻场开发 | 2016.06-2017.02</span>
-                </div>
-                <div class="project-content">
-                    <p class="project-desc">负责设备模块和初验问题清单修改</p>
-                    <div class="project-details">
-                        <div class="detail-item">
-                            <h4>技术栈：</h4>
-                            <div class="tech-stack">
-                                <span>VS 2012</span>
-                                <span>Oracle</span>
-                                <span>SVN</span>
-                                <span>Eclipse</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="education">
-            <h2><i class="bi bi-mortarboard"></i>教育经历</h2>
-            <div class="education-item">
-                <p class="edu-meta">计算机科学与技术 | 大专 | 2017-2020</p>
-            </div>
-        </section>
     </div>
 
-    <a download="yee.pdf" class="download-pdf-btn">
-        <i class="bi bi-file-earmark-pdf"></i>
-        <span>下载简历</span>
-    </a>
-
     <script>
-        const signatures = [
+        // ============================================
+        // 开机动画 — CMD 终端模拟
+        // ============================================
+        (function bootSequence() {
+            if (sessionStorage.getItem('mecha-booted')) {
+                document.getElementById('bootOverlay').style.display = 'none';
+                document.getElementById('mainContent').classList.add('content-reveal');
+                return;
+            }
+            var overlay = document.getElementById('bootOverlay');
+            var content = document.getElementById('mainContent');
+            content.style.opacity = '0';
+
+            var cmd = 'LOAD OPERATOR_DOSSIER.sys --verbose';
+            var cmdText = document.getElementById('bootCmdText');
+            var cmdCursor = document.getElementById('bootCmdCursor');
+            var bootBody = document.getElementById('bootBody');
+            var progressTrack = document.getElementById('bootProgressTrack');
+            var progressPct = document.getElementById('bootProgressPct');
+            var segs = progressTrack.querySelectorAll('.boot-progress-seg');
+            var items = [
+                { id: 'biStat0', label: 'PILOT_DATA.bin', threshold: 15 },
+                { id: 'biStat1', label: 'THREAT_MATRIX.sys', threshold: 30 },
+                { id: 'biStat2', label: 'COMBAT_READOUTS.dll', threshold: 50 },
+                { id: 'biStat3', label: 'MISSION_ARCHIVE.dat', threshold: 70 },
+                { id: 'biStat4', label: 'COMMS_CHANNEL.cfg', threshold: 85 }
+            ];
+
+            // Phase 1: type command
+            var i = 0;
+            function typeChar() {
+                if (i < cmd.length) {
+                    cmdText.textContent += cmd.charAt(i);
+                    i++;
+                    setTimeout(typeChar, 28);
+                } else {
+                    cmdCursor.style.display = 'none';
+                    setTimeout(startProgress, 350);
+                }
+            }
+            setTimeout(typeChar, 150);
+
+            // Phase 2: progress bar + loading items
+            function startProgress() {
+                bootBody.classList.add('boot-body--visible');
+
+                // Stagger item fade-in
+                var itemEls = document.querySelectorAll('.boot-item');
+                itemEls.forEach(function(el, idx) {
+                    setTimeout(function() {
+                        el.classList.add('boot-item--in');
+                    }, idx * 280 + 150);
+                });
+
+                var pct = 0;
+                var completed = {};
+
+                function tick() {
+                    if (pct >= 100) {
+                        setTimeout(showComplete, 250);
+                        return;
+                    }
+                    pct += 5;
+                    progressPct.textContent = pct + '%';
+
+                    // Light up segments (20 segments, each is 5%)
+                    var segIdx = (pct / 5) - 1;
+                    if (segIdx >= 0 && segIdx < segs.length) {
+                        segs[segIdx].classList.add('boot-progress-seg--on');
+                    }
+
+                    // Check item thresholds
+                    items.forEach(function(item) {
+                        if (!completed[item.id] && pct >= item.threshold) {
+                            completed[item.id] = true;
+                            var statEl = document.getElementById(item.id);
+                            statEl.textContent = '[ OK ]';
+                            statEl.classList.add('boot-item-status--ok');
+                            statEl.parentElement.classList.add('boot-item--ok');
+                        }
+                    });
+
+                    setTimeout(tick, 130);
+                }
+                tick();
+            }
+
+            // Phase 3: complete line
+            function showComplete() {
+                var complete = document.getElementById('bootComplete');
+                complete.classList.add('boot-complete--show');
+                setTimeout(doGlitch, 600);
+            }
+
+            // Phase 4: glitch crash → reveal
+            function doGlitch() {
+                overlay.classList.add('boot-glitch');
+                setTimeout(function() {
+                    overlay.classList.add('boot-overlay--done');
+                    content.style.opacity = '1';
+                    content.classList.add('content-reveal');
+                    sessionStorage.setItem('mecha-booted', '1');
+                }, 380);
+            }
+        })();
+
+        // ============================================
+        // 系统时钟
+        // ============================================
+        function tick() {
+            const n = new Date();
+            const s = n.getFullYear() + '-' +
+                String(n.getMonth()+1).padStart(2,'0') + '-' +
+                String(n.getDate()).padStart(2,'0') + ' ' +
+                String(n.getHours()).padStart(2,'0') + ':' +
+                String(n.getMinutes()).padStart(2,'0') + ':' +
+                String(n.getSeconds()).padStart(2,'0');
+            document.getElementById('topbar-time').textContent = s;
+        }
+        tick(); setInterval(tick, 1000);
+
+        // ============================================
+        // 签名打字机
+        // ============================================
+        const sigs = [
             "大江东去，浪淘尽，千古风流人物。",
             "月落乌啼霜满天，江枫渔火对愁眠。",
             "一蓑烟雨任平生，何惧浮云遮望眼。",
             "人间如梦，何必问归期。",
         ];
+        let sigIdx = 0, charIdx = 0, deleting = false;
 
-        // 下载按钮使用HTML的download属性自动处理下载
-        // 确保下载按钮有正确的href属性
-        document.querySelector('.download-pdf-btn').href = 'yee.pdf';
-
-        // 复制功能和通知显示
-        function showNotification(message = '复制成功') {
-            const notification = document.getElementById('notification');
-            const notificationText = notification.querySelector('.notification-text');
-            notificationText.textContent = message;
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 2000);
-        }
-
-        // 为联系方式添加点击复制功能
-        document.querySelectorAll('.contact-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const value = this.getAttribute('data-value');
-                navigator.clipboard.writeText(value).then(() => {
-                    showNotification('复制成功');
-                }).catch(err => {
-                    console.error('复制失败:', err);
-                });
-            });
-        });
-
-        // 为下载按钮添加点击事件
-        document.querySelector('.download-pdf-btn').addEventListener('click', function(e) {
-            // 不阻止默认下载行为
-            setTimeout(() => {
-                showNotification('下载成功');
-            }, 500);
-        });
-
-        let currentSignatureIndex = 0;
-        let currentCharIndex = 0;
-        let isDeleting = false;
-    
-        function type() {
-            const signatureElement = document.getElementById("signature");
-            const cursorElement = document.getElementById("cursor");
-            const currentSignature = signatures[currentSignatureIndex];
-    
-            if (isDeleting) {
-                signatureElement.textContent = currentSignature.substring(0, currentCharIndex--);
-                cursorElement.style.visibility = 'visible';
-                if (currentCharIndex < 0) {
-                    isDeleting = false;
-                    currentSignatureIndex = (currentSignatureIndex + 1) % signatures.length;
-                    setTimeout(type, 500);
-                } else {
-                    setTimeout(type, 100);
-                }
+        function typeSig() {
+            const el = document.getElementById("signature");
+            const cur = document.getElementById("cursor");
+            const txt = sigs[sigIdx];
+            if (deleting) {
+                el.textContent = txt.substring(0, charIdx--);
+                cur.style.visibility = 'visible';
+                if (charIdx < 0) { deleting = false; sigIdx = (sigIdx+1) % sigs.length; setTimeout(typeSig, 500); }
+                else { setTimeout(typeSig, 100); }
             } else {
-                signatureElement.textContent = currentSignature.substring(0, currentCharIndex++);
-                if (currentCharIndex === currentSignature.length) {
-                    cursorElement.style.visibility = 'visible';
-                    isDeleting = true;
-                    setTimeout(() => {
-                        cursorElement.style.visibility = 'hidden';
-                        signatureElement.style.visibility = 'hidden';
-                        setTimeout(() => {
-                            signatureElement.style.visibility = 'visible';
-                            type();
-                        }, 1000);
-                    }, 1000);
-                } else {
-                    cursorElement.style.visibility = 'visible';
-                    setTimeout(type, 150);
-                }
+                el.textContent = txt.substring(0, charIdx++);
+                if (charIdx === txt.length) {
+                    cur.style.visibility = 'visible'; deleting = true;
+                    setTimeout(() => { cur.style.visibility = 'hidden'; el.style.visibility = 'hidden';
+                        setTimeout(() => { el.style.visibility = 'visible'; typeSig(); }, 1000); }, 1000);
+                } else { cur.style.visibility = 'visible'; setTimeout(typeSig, 150); }
             }
         }
-    
-        type();
+        typeSig();
 
-        // 计算年龄和工作年限
-        function calculateAgeAndWork() {
-            const birthYear = 1997;
-            const workStartYear = 2016;
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear();
-            
-            const age = currentYear - birthYear;
-            document.getElementById('age').textContent = age;
-            
-            const workYears = currentYear - workStartYear;
-            document.getElementById('workYears').textContent = workYears;
+        // ============================================
+        // 年龄与经验
+        // ============================================
+        function calcStats() {
+            const y = new Date().getFullYear();
+            const a = document.getElementById('railAge'), w = document.getElementById('railWorkYears');
+            if (a) a.textContent = y - 1997;
+            if (w) w.textContent = (y - 2016) + 'Y';
         }
-    
-        window.addEventListener('load', calculateAgeAndWork);
+        window.addEventListener('load', calcStats);
 
         // ============================================
-        // 滚动视差和进入视口动画
+        // 通知
         // ============================================
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // 观察所有卡片元素
-        document.querySelectorAll('.skill-card, .experience-item, .project-item, .education-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(50px)';
-            el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-            observer.observe(el);
-        });
-
-        // ============================================
-        // 鼠标跟随光效
-        // ============================================
-        let mouseX = 0;
-        let mouseY = 0;
-        let cursorX = 0;
-        let cursorY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.1;
-            cursorY += (mouseY - cursorY) * 0.1;
-
-            const cursor = document.querySelector('.cursor-glow');
-            if (cursor) {
-                cursor.style.left = cursorX + 'px';
-                cursor.style.top = cursorY + 'px';
-            }
-
-            requestAnimationFrame(animateCursor);
+        function notify(msg) {
+            const n = document.getElementById('notification');
+            n.querySelector('.alert-toast__msg').textContent = msg;
+            n.classList.add('alert-toast--show');
+            setTimeout(() => n.classList.remove('alert-toast--show'), 1800);
         }
 
-        // 创建鼠标跟随光效元素
-        const cursorGlow = document.createElement('div');
-        cursorGlow.className = 'cursor-glow';
-        cursorGlow.style.cssText = `
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent 70%);
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s;
-        `;
-        document.body.appendChild(cursorGlow);
-
-        // 鼠标移动时显示光效
-        document.addEventListener('mousemove', () => {
-            cursorGlow.style.opacity = '1';
-        });
-
-        document.addEventListener('mouseleave', () => {
-            cursorGlow.style.opacity = '0';
-        });
-
-        animateCursor();
-
         // ============================================
-        // 3D卡片鼠标跟踪效果
+        // 复制
         // ============================================
-        document.querySelectorAll('.skill-card, .profile-header, .job-intention').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                const rotateX = (y - centerY) / 10;
-                const rotateY = (centerX - x) / 10;
-
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        document.querySelectorAll('[data-copy]').forEach(el => {
+            el.addEventListener('click', function() {
+                navigator.clipboard.writeText(this.getAttribute('data-copy')).then(() => notify('COPY OK')).catch(() => {});
             });
+        });
 
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+        // PDF 下载通知
+        var alarmEl = document.querySelector('.threat-block a[download]');
+        if (alarmEl) alarmEl.addEventListener('click', function() {
+            setTimeout(function() { notify('DOWNLOADING'); }, 300);
+        });
+
+        // ============================================
+        // 滚动入场
+        // ============================================
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('fade-up--in'); });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.skill-card, .log-entry, .proj-table tr, .threat-item').forEach((el, i) => {
+            el.classList.add('fade-up', 'stagger-' + ((i % 5) + 1));
+            obs.observe(el);
+        });
+        document.querySelectorAll('.header-inner, .side-rail').forEach(el => { el.style.opacity = '1'; });
+
+        // ============================================
+        // 项目详情展开
+        // ============================================
+        let openDetail = null;
+        document.querySelectorAll('[data-detail]').forEach(row => {
+            row.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') return;
+                const detail = document.getElementById(this.getAttribute('data-detail'));
+                if (!detail) return;
+                if (openDetail && openDetail !== detail) openDetail.classList.remove('proj-detail--open');
+                detail.classList.toggle('proj-detail--open');
+                openDetail = detail.classList.contains('proj-detail--open') ? detail : null;
             });
         });
 
         // ============================================
-        // 滚动进度条
+        // 灯泡亮度切换
         // ============================================
-        const progressBar = document.createElement('div');
-        progressBar.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #00f0ff, #8b5cf6, #ff00ff);
-            z-index: 10000;
-            transform-origin: left;
-            transition: transform 0.1s;
-        `;
-        document.body.appendChild(progressBar);
+        const bulb = document.getElementById('lightbulbBtn');
+        const savedBright = localStorage.getItem('mecha-brightness');
+        if (savedBright === 'dim') {
+            document.body.setAttribute('data-brightness', 'dim');
+            bulb.classList.remove('lightbulb-btn--on');
+        }
 
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.pageYOffset;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = scrollTop / docHeight;
-            progressBar.style.transform = `scaleX(${scrollPercent})`;
-        });
-
-        // ============================================
-        // 技能标签随机闪烁效果
-        // ============================================
-        setInterval(() => {
-            const tags = document.querySelectorAll('.skill-tag, .tech-stack span');
-            const randomTag = tags[Math.floor(Math.random() * tags.length)];
-            if (randomTag) {
-                randomTag.style.animation = 'none';
-                setTimeout(() => {
-                    randomTag.style.animation = 'pulse 0.5s ease-in-out';
-                }, 10);
-            }
-        }, 2000);
-
-        // 添加脉冲动画
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(0, 240, 255, 0.6); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // ============================================
-        // 项目详细内容展开/收起
-        // ============================================
-        document.querySelectorAll('.project-item').forEach(project => {
-            const detail = project.querySelector('.project-ex-detail');
-            if (detail) {
-                project.style.cursor = 'pointer';
-                project.addEventListener('click', (e) => {
-                    // 如果点击的是链接或按钮，不触发展开
-                    if (e.target.tagName === 'A' || e.target.closest('a')) {
-                        return;
-                    }
-                    detail.classList.toggle('active');
-                });
+        bulb.addEventListener('click', () => {
+            const isDim = document.body.getAttribute('data-brightness') === 'dim';
+            if (isDim) {
+                document.body.removeAttribute('data-brightness');
+                bulb.classList.add('lightbulb-btn--on');
+                localStorage.setItem('mecha-brightness', 'bright');
+            } else {
+                document.body.setAttribute('data-brightness', 'dim');
+                bulb.classList.remove('lightbulb-btn--on');
+                localStorage.setItem('mecha-brightness', 'dim');
             }
         });
 
         // ============================================
-        // 主题切换功能
+        // 色调主题切换
         // ============================================
-        const themes = ['cyan', 'fire', 'forest', 'ocean', 'purple', 'gold', 'pink', 'pixel', 'parchment'];
-        let currentThemeIndex = 0;
-        
-        // 从localStorage读取保存的主题
-        const savedTheme = localStorage.getItem('resume-theme') || 'pixel';
-        document.body.setAttribute('data-theme', savedTheme);
-        currentThemeIndex = themes.indexOf(savedTheme);
-        if (currentThemeIndex === -1) currentThemeIndex = 0;
-        
-        // 更新活动主题按钮
-        function updateActiveTheme() {
-            document.querySelectorAll('.theme-option').forEach((btn, index) => {
-                if (themes[index] === document.body.getAttribute('data-theme')) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+        const themes = ['alert', 'coolant'];
+        let curTheme = 0;
+        const savedTheme = localStorage.getItem('mecha-theme');
+        if (savedTheme && themes.includes(savedTheme)) {
+            document.body.setAttribute('data-theme', savedTheme);
+            curTheme = themes.indexOf(savedTheme);
+        }
+
+        function updateThemeUI() {
+            const active = document.body.getAttribute('data-theme') || 'alert';
+            document.querySelectorAll('.theme-opt').forEach((btn, i) => {
+                btn.classList.toggle('theme-opt--active', themes[i] === active);
             });
         }
-        
-        updateActiveTheme();
-        
-        // 主题切换按钮点击事件
-        document.querySelectorAll('.theme-option').forEach((btn, index) => {
+        updateThemeUI();
+
+        document.querySelectorAll('.theme-opt').forEach((btn, i) => {
             btn.addEventListener('click', () => {
-                const theme = themes[index];
-                document.body.setAttribute('data-theme', theme);
-                localStorage.setItem('resume-theme', theme);
-                currentThemeIndex = index;
-                updateActiveTheme();
-                
-                // 添加切换动画效果
-                document.body.style.transition = 'background-color 0.5s ease';
-                setTimeout(() => {
-                    document.body.style.transition = '';
-                }, 500);
+                document.body.setAttribute('data-theme', themes[i]);
+                localStorage.setItem('mecha-theme', themes[i]);
+                curTheme = i; updateThemeUI();
             });
         });
-        
-        // 主题切换器显示/隐藏
-        const themeSwitcher = document.querySelector('.theme-switcher');
-        const themeToggle = document.querySelector('.theme-toggle');
-        const themeMenu = document.querySelector('.theme-menu');
-        
-        themeToggle.addEventListener('click', (e) => {
+
+        // 齿轮按钮打开菜单
+        const gearBtn = document.getElementById('gearBtn');
+        const themeMenu = document.getElementById('themeMenu');
+        gearBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            themeMenu.classList.toggle('active');
+            themeMenu.classList.toggle('theme-menu--open');
         });
-        
         document.addEventListener('click', (e) => {
-            if (!themeSwitcher.contains(e.target)) {
-                themeMenu.classList.remove('active');
+            if (!e.target.closest('#gearBtn') && !e.target.closest('#themeMenu')) {
+                themeMenu.classList.remove('theme-menu--open');
             }
         });
     </script>
