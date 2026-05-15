@@ -591,8 +591,68 @@ body[data-brightness="dim"] .panel--threat::before { border-color: rgba(255,26,2
 .pilot-avatar:hover img { filter: saturate(1) contrast(1.1) brightness(1); }
 
 .pilot-name {
-  font-family: var(--font-display); font-size: 1.3rem; font-weight: 700;
-  color: var(--text-hot); text-align: center; letter-spacing: 0.08em;
+  text-align: center;
+  padding: 0.35rem 0;
+}
+
+.pilot-name a {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-hot);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  padding: 0.3em 0.7em;
+  position: relative;
+  border: 1px solid transparent;
+  border-bottom: 2px dotted var(--warn-border);
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+  transition: color 0.25s, text-shadow 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
+}
+
+/* top-left corner accent */
+.pilot-name a::before {
+  content: '';
+  position: absolute;
+  left: 5px; top: 5px;
+  width: 8px; height: 8px;
+  border-left: 2px solid var(--warn-border);
+  border-top: 2px solid var(--warn-border);
+  opacity: 0.5;
+  transition: opacity 0.25s, border-color 0.25s, width 0.25s, height 0.25s;
+}
+
+/* arrow indicator */
+.pilot-name a::after {
+  content: '↗';
+  display: inline-block;
+  margin-left: 0.35em;
+  font-size: 0.75em;
+  font-weight: 400;
+  color: var(--warn);
+  opacity: 0.45;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.pilot-name a:hover {
+  color: var(--warn);
+  text-shadow: 0 0 16px var(--warn-glow);
+  border-bottom-color: var(--warn);
+  border-bottom-style: solid;
+  background: var(--warn-dim);
+  box-shadow: inset 0 0 24px var(--warn-dim), 0 0 18px var(--warn-glow);
+}
+
+.pilot-name a:hover::before {
+  opacity: 1;
+  border-color: var(--warn);
+  width: 12px; height: 12px;
+}
+
+.pilot-name a:hover::after {
+  opacity: 1;
+  transform: translateX(3px);
 }
 
 .data-row {
