@@ -101,7 +101,7 @@
                 <div class="panel__body">
                     <div class="pilot-avatar">
                         <a href="https://yeehome.netlify.app/" target="_blank">
-                            <img src="avatar.jpg" alt="易天华">
+                            <img src="kl.gif" alt="易天华">
                         </a>
                     </div>
                     <div class="pilot-name">
@@ -186,10 +186,10 @@
                     <div class="header-main">
                         <div class="header-name">易天华</div>
                         <div class="header-tags">
-                            <span class="tag tag--alert">.NET DEV</span>
-                            <span class="tag tag--ok">8Y+ COMBAT</span>
-                            <span class="tag">C# FULLSTACK</span>
-                            <span class="tag tag--cool">UNIAPP/VUE</span>
+                            <span class="tag tag--alert">AI Agent全栈</span>
+                            <span class="tag tag--ok">10Y+ COMBAT</span>
+                            <span class="tag">Claude Code</span>
+                            <span class="tag tag--cool">Openclaw/Copaw部署</span>
                         </div>
                         <div class="sig-wrap">
                             <span class="sig-prompt">$</span>
@@ -197,39 +197,21 @@
                             <span id="cursor">_</span>
                         </div>
                     </div>
-                    <!-- 仪表盘组 -->
-                    <div class="gauges-group">
-                        <div class="gauge-dial">
-                            <svg viewBox="0 0 56 56" width="56" height="56">
-                                <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" stroke-width="3" opacity="0.15" stroke-dasharray="150" stroke-dashoffset="0"/>
-                                <circle cx="28" cy="28" r="24" fill="none" stroke="var(--warn)" stroke-width="3" stroke-linecap="round" stroke-dasharray="150" stroke-dashoffset="15" transform="rotate(-90 28 28)"/>
-                                <circle cx="28" cy="28" r="16" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.3"/>
-                                <line x1="28" y1="28" x2="28" y2="10" stroke="var(--warn)" stroke-width="2" stroke-linecap="round" transform="rotate(-45 28 28)"/>
-                                <circle cx="28" cy="28" r="3" fill="var(--warn)"/>
-                            </svg>
-                            <div class="gauge-dial__val">.NET DEV</div>
-                            <div class="gauge-dial__lbl">POSITION</div>
+                    <!-- 数据卡片组 — 薪资 + Base地 -->
+                    <div class="stat-cards">
+                        <div class="stat-card stat-card--warn">
+                            <div class="stat-card__label">BOUNTY</div>
+                            <div class="stat-card__value">15<span class="stat-card__sep">&ndash;</span>20K</div>
+                            <div class="stat-card__track">
+                                <i class="stat-card__track-fill"></i>
+                            </div>
+                            <div class="stat-card__aux">0 / 30K</div>
                         </div>
-                        <div class="gauge-dial">
-                            <svg viewBox="0 0 56 56" width="56" height="56">
-                                <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" stroke-width="3" opacity="0.15"/>
-                                <circle cx="28" cy="28" r="24" fill="none" stroke="var(--ok)" stroke-width="3" stroke-linecap="round" stroke-dasharray="150" stroke-dashoffset="30" transform="rotate(-90 28 28)"/>
-                                <rect x="20" y="24" width="16" height="14" rx="2" fill="none" stroke="var(--ok)" stroke-width="1.5" opacity="0.6"/>
-                                <text x="28" y="34" text-anchor="middle" font-family="Share Tech Mono" font-size="8" fill="var(--ok)">15K+</text>
-                                <circle cx="28" cy="28" r="3" fill="var(--ok)"/>
-                            </svg>
-                            <div class="gauge-dial__val">15-20K</div>
-                            <div class="gauge-dial__lbl">BOUNTY</div>
-                        </div>
-                        <div class="gauge-dial">
-                            <svg viewBox="0 0 56 56" width="56" height="56">
-                                <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" stroke-width="3" opacity="0.15"/>
-                                <circle cx="28" cy="28" r="24" fill="none" stroke="var(--cool)" stroke-width="3" stroke-linecap="round" stroke-dasharray="150" stroke-dashoffset="40" transform="rotate(-90 28 28)"/>
-                                <polygon points="28,6 32,22 44,22 34,30 38,48 28,38 18,48 22,30 12,22 24,22" fill="var(--cool)" opacity="0.3" transform="scale(0.4) translate(38 8)"/>
-                                <circle cx="28" cy="28" r="3" fill="var(--cool)"/>
-                            </svg>
-                            <div class="gauge-dial__val">SHANGHAI</div>
-                            <div class="gauge-dial__lbl">SECTOR</div>
+                        <div class="stat-card stat-card--cool">
+                            <div class="stat-card__label">SECTOR</div>
+                            <div class="stat-card__value">SHENZHEN</div>
+                            <div class="stat-card__sub">深圳</div>
+                            <span class="stat-card__marker"></span>
                         </div>
                     </div>
                 </div>
